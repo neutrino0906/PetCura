@@ -21,6 +21,7 @@ version: 1.0.0+1
 
 environment:
   sdk: '>=2.18.4 <3.0.0'
+  
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -31,6 +32,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  chat_gpt_sdk:
+    git:
+      url: https://github.com/iampawan/Flutter-ChatGPT.git
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -39,6 +43,10 @@ dependencies:
   camera: ^0.10.3+2
   path_provider:
   path:
+  firebase_auth: ^4.4.2
+  firebase_core: ^2.10.0
+  flutter_dotenv: ^5.0.2
+  velocity_x: ^3.6.0
 
 dev_dependencies:
   flutter_test:

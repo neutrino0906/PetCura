@@ -1,14 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:pet_care/ChatScreen.dart';
 import 'package:pet_care/RegScreen.dart';
+import 'package:pet_care/VeteScreen.dart';
 import './DetectionScreen.dart';
 import './SingleProdScreen.dart';
 import 'ProdScreen.dart';
 import 'package:camera/camera.dart';
+import 'package:firebase_core/firebase_core.dart';
+// import 'firebase_options.dart';
 
 late List<CameraDescription> cameras;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+      // options: DefaultFirebaseOptions.currentPlatform,
+      );
   cameras = await availableCameras();
+  // WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
@@ -25,12 +33,15 @@ class MyApp extends StatelessWidget {
         ProdScreen().getRoute(): (context) => ProdScreen(),
         DetectionScreen().getRoute(): (context) => DetectionScreen(),
         SingleProdScreen().getRoute(): (context) => SingleProdScreen(),
+        VeteScreen().getRoute(): (context) => VeteScreen(),
+        ChatScreen().getRoute(): (context) => ChatScreen(),
       },
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: RegScreen(),
+      // home: RegScreen(),
+      home: ChatScreen(),
     );
   }
 }
@@ -60,7 +71,7 @@ class sideDrawer extends StatelessWidget {
             title: const Text('Welcome'),
             onTap: () => {
               Navigator.of(context).pop(),
-              Navigator.of(context).pushNamed('/'),
+              Navigator.of(context).pushReplacementNamed('/'),
             },
           ),
           ListTile(
@@ -76,7 +87,7 @@ class sideDrawer extends StatelessWidget {
             title: const Text('Consultancy'),
             onTap: () => {
               Navigator.of(context).pop(),
-              // Navigator.of(context).pushNamed(Fertilizer().routename())
+              Navigator.of(context).pushNamed(VeteScreen().getRoute()),
             },
           ),
           ListTile(
@@ -112,6 +123,8 @@ class HomePage extends StatelessWidget {
     return Scaffold(
         drawer: sideDrawer(),
         appBar: AppBar(
+            toolbarHeight: 80,
+            iconTheme: IconThemeData(color: Colors.black),
             centerTitle: true,
             // title: Text("PET CARE"),
             // leading: const Icon(
@@ -147,7 +160,7 @@ class HomePage extends StatelessWidget {
                     style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Row(
@@ -157,12 +170,13 @@ class HomePage extends StatelessWidget {
                       onTap: () => Navigator.of(context)
                           .pushNamed(DetectionScreen().getRoute()),
                       child: Stack(
+                        alignment: Alignment.center,
                         children: [
                           Image.asset(
                             "assets/Brown_Rectangle.png",
                             scale: 0.9,
                           ),
-                          Text(
+                          const Text(
                             "BEHAVIOUR\nDETECTION",
                             textAlign: TextAlign.center,
                             style: TextStyle(
@@ -171,41 +185,45 @@ class HomePage extends StatelessWidget {
                             ),
                           ),
                         ],
-                        alignment: Alignment.center,
                       ),
                     ),
-                    Stack(
-                      children: [
-                        Image.asset(
-                          "assets/Purple_Rectangle.png",
-                          scale: 0.9,
-                        ),
-                        Text(
-                          "VETERINARIAN\'S\nCONSULTANCY",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
+                    GestureDetector(
+                      onTap: () => Navigator.of(context)
+                          .pushNamed(VeteScreen().getRoute()),
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Image.asset(
+                            "assets/Purple_Rectangle.png",
+                            scale: 0.9,
                           ),
-                        ),
-                      ],
-                      alignment: Alignment.center,
+                          const Text(
+                            "VETERINARIAN\'S\nCONSULTANCY",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Stack(
+                      alignment: Alignment.center,
                       children: [
                         Image.asset(
                           "assets/Blue_Rectangle.png",
                           scale: 0.9,
                         ),
-                        Text(
+                        const Text(
                           "PET\nSCHEDULER",
                           textAlign: TextAlign.center,
                           style: TextStyle(
@@ -214,18 +232,18 @@ class HomePage extends StatelessWidget {
                           ),
                         ),
                       ],
-                      alignment: Alignment.center,
                     ),
                     GestureDetector(
                       onTap: () => Navigator.of(context)
                           .pushNamed(ProdScreen().getRoute()),
                       child: Stack(
+                        alignment: Alignment.center,
                         children: [
                           Image.asset(
                             "assets/Green_Rectangle.png",
                             scale: 0.9,
                           ),
-                          Text(
+                          const Text(
                             "PET\nSTORE",
                             textAlign: TextAlign.center,
                             style: TextStyle(
@@ -234,7 +252,6 @@ class HomePage extends StatelessWidget {
                             ),
                           ),
                         ],
-                        alignment: Alignment.center,
                       ),
                     ),
                   ],

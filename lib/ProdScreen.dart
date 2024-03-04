@@ -29,6 +29,8 @@ class ProdScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+            toolbarHeight: 80,
+            iconTheme: IconThemeData(color: Colors.black),
             centerTitle: true,
             // title: Text("PET CARE"),
             // leading: const Icon(
