@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+// import 'package:get/get.dart';
+// import 'package:pet_care/BreedDetection.dart';
 import 'package:pet_care/ChatScreen.dart';
 import 'package:pet_care/RegScreen.dart';
 import 'package:pet_care/VeteScreen.dart';
@@ -7,6 +9,8 @@ import './SingleProdScreen.dart';
 import 'ProdScreen.dart';
 import 'package:camera/camera.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_alarm_clock/flutter_alarm_clock.dart';
 // import 'firebase_options.dart';
 
 late List<CameraDescription> cameras;
@@ -35,13 +39,22 @@ class MyApp extends StatelessWidget {
         SingleProdScreen().getRoute(): (context) => SingleProdScreen(),
         VeteScreen().getRoute(): (context) => VeteScreen(),
         ChatScreen().getRoute(): (context) => ChatScreen(),
+        // BreedDetection().getRoute(): (context) => BreedDetection(),
       },
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
       // home: RegScreen(),
-      home: ChatScreen(),
+      home: StreamBuilder(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData)
+            return HomePage();
+          else
+            return RegScreen();
+        },
+      ),
     );
   }
 }
@@ -67,8 +80,8 @@ class sideDrawer extends StatelessWidget {
             ),
           ),
           ListTile(
-            leading: const Icon(Icons.input),
-            title: const Text('Welcome'),
+            leading: const Icon(Icons.logout),
+            title: const Text('Log Out'),
             onTap: () => {
               Navigator.of(context).pop(),
               Navigator.of(context).pushReplacementNamed('/'),
@@ -156,7 +169,7 @@ class HomePage extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(44.0),
                   child: Text(
-                    "Welcome,\n$name",
+                    "Welcome,\n${FirebaseAuth.instance.currentUser!.displayName}",
                     style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -176,13 +189,31 @@ class HomePage extends StatelessWidget {
                             "assets/Brown_Rectangle.png",
                             scale: 0.9,
                           ),
-                          const Text(
-                            "BEHAVIOUR\nDETECTION",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
-                            ),
+                          Stack(
+                            children: [
+                              // Implement the stroke
+                              Text(
+                                'BEHAVIOUR\nDETECTION',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  // letterSpacing: 5,
+                                  fontWeight: FontWeight.bold,
+                                  foreground: Paint()
+                                    ..style = PaintingStyle.stroke
+                                    ..strokeWidth = 3
+                                    ..color = Color.fromARGB(255, 0, 0, 0),
+                                ),
+                              ),
+                              const Text(
+                                "BEHAVIOUR\nDETECTION",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Color.fromARGB(255, 255, 255, 255),
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -216,22 +247,25 @@ class HomePage extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        Image.asset(
-                          "assets/Blue_Rectangle.png",
-                          scale: 0.9,
-                        ),
-                        const Text(
-                          "PET\nSCHEDULER",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
+                    GestureDetector(
+                      onTap: () => FlutterAlarmClock.showAlarms(),
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Image.asset(
+                            "assets/Blue_Rectangle.png",
+                            scale: 0.9,
                           ),
-                        ),
-                      ],
+                          const Text(
+                            "PET\nSCHEDULER",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                     GestureDetector(
                       onTap: () => Navigator.of(context)

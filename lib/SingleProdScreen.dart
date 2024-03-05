@@ -19,12 +19,10 @@ class _SingleProdScreenState extends State<SingleProdScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+            iconTheme: IconThemeData(color: Colors.black),
             centerTitle: true,
             // title: Text("PET CARE"),
-            leading: const Icon(
-              Icons.menu,
-              color: Color.fromARGB(255, 0, 0, 0),
-            ),
+
             actions: const [
               Icon(
                 Icons.person,

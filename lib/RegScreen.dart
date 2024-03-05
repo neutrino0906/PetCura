@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pet_care/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:flutterapp/services/functions/firebaseFunctions.dart';
 
 class RegScreen extends StatefulWidget {
   const RegScreen({super.key});
@@ -269,7 +271,22 @@ class _RegScreenState extends State<RegScreen>
                                     ScaffoldMessenger.of(context)
                                         .showSnackBar(snackBar);
                                     return;
+                                  } else if (_register_pass.text.length < 6) {
+                                    snackBar = const SnackBar(
+                                      content:
+                                          Text("Please enter strong password"),
+                                    );
+                                    ScaffoldMessenger.of(context)
+                                        .hideCurrentSnackBar();
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(snackBar);
+                                    return;
                                   }
+
+                                  // _login_email = _register_email;
+                                  // _login_pass = _register_pass;
+                                  // _tabController.animateTo(
+                                  //     (_tabController.index + 1) % 2);
 
                                   try {
                                     UserCredential userCredential =
@@ -277,6 +294,14 @@ class _RegScreenState extends State<RegScreen>
                                             .createUserWithEmailAndPassword(
                                                 email: _register_email.text,
                                                 password: _register_pass.text);
+                                    await FirebaseAuth.instance.currentUser!
+                                        .updateDisplayName(_register_name.text);
+                                    await FirebaseFirestore.instance
+                                        .collection('users')
+                                        .doc(userCredential.user!.uid)
+                                        .set({'name': _register_name.text});
+
+                                    // ignore: use_build_context_synchronously
                                     Navigator.pushReplacementNamed(
                                         context, HomePage().getRoute());
                                   } on FirebaseAuthException catch (e) {
@@ -482,6 +507,7 @@ class _RegScreenState extends State<RegScreen>
                                             .signInWithEmailAndPassword(
                                                 email: _login_email.text,
                                                 password: _login_pass.text);
+                                    // ignore: use_build_context_synchronously
                                     Navigator.pushReplacementNamed(
                                         context, HomePage().getRoute());
                                   } on FirebaseAuthException catch (e) {

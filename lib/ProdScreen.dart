@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pet_care/widgets.dart/SingleProdTile.dart';
+import 'package:pet_care/widgets/SingleProdTile.dart';
 import '../SingleProdScreen.dart';
 
 class ProdScreen extends StatelessWidget {
@@ -82,10 +82,14 @@ class ProdScreen extends StatelessWidget {
                       GestureDetector(
                         // onTap: Navigator.of(context)
                         //     .pushNamed(SingleProdScreen().getRoute()),
-                        child: SingleProdTile(
-                            image: ProdList[i][0],
-                            name: ProdList[i][1],
-                            price: ProdList[i][2]),
+                        child: GestureDetector(
+                          onTap: () => Navigator.of(context)
+                              .pushNamed(SingleProdScreen().getRoute()),
+                          child: SingleProdTile(
+                              image: ProdList[i][0],
+                              name: ProdList[i][1],
+                              price: ProdList[i][2]),
+                        ),
                       ),
                       SizedBox(height: 10),
                     ],

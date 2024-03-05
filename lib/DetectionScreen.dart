@@ -1,7 +1,9 @@
+import 'dart:io';
 import 'dart:ui';
 import '../main.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:file_picker/file_picker.dart';
 
 class DetectionScreen extends StatefulWidget {
   const DetectionScreen({super.key});
@@ -26,6 +28,9 @@ class _DetectionScreenState extends State<DetectionScreen> {
       if (e is CameraException) print("Error!");
     });
   }
+
+  FilePickerResult? result;
+  File? file;
 
   @override
   Widget build(BuildContext context) {
@@ -59,6 +64,13 @@ class _DetectionScreenState extends State<DetectionScreen> {
               leading: Icon(Icons.camera_alt),
             ),
           ),
+          TextButton(
+              onPressed: () async => {
+                    result = await FilePicker.platform.pickFiles(),
+                    if (result != null)
+                      {file = File(result!.files.single.path!)}
+                  },
+              child: const Text("Choose File"))
         ],
       ),
     );
